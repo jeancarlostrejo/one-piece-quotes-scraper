@@ -123,4 +123,6 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    'url_scraping' => env('URL_SCRAPING', 'https://freakuotes.com/frases/30/one-piece'),
+
 ];
