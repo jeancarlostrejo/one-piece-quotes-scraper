@@ -6,6 +6,7 @@ use App\Exceptions\PageUnavailableException;
 use App\Services\ScrapingService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 
@@ -19,6 +20,8 @@ class ScrapingController extends Controller
             $quotes = $this->scrapingService->fetchQuotes();
 
             $jsonData = json_encode($quotes, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+
+            Cache::flush();
 
             Storage::disk('quotes')->put('quotes.json', $jsonData);
 
