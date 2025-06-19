@@ -54,19 +54,22 @@ php artisan key:generate
 ###  4. Configurar la URL de Scraping
 Abre el archivo .env y asegúrate de configurar la URL de la página objetivo [freakuotes](https://freakuotes.com/frases/30/one-piece) 
 
-### 5. Ejecuta las migraciones
+###  5. Configurar El Driver de Caché
+Abre el archivo .env y configurar el driver de caché que desees utilizar (por defecto es driver es CACHE_STORE=database)
+
+### 6. Ejecuta las migraciones
 ```bash
 php artisan migrate
 ```
 
-### 6. Levanta los servidores de desarrollo
+### 7. Levanta los servidores de desarrollo
 Ejecuta los siguientes comandos:
 ```bash
 php artisan serve
 npm run dev
 ```
 
-### 7. Visita la url 
+### 8. Visita la url 
 Visita la dirección http://127.0.0.1:8000
 
 ---
