@@ -1,6 +1,6 @@
 # One Piece Quotes Scraper
 
-Este proyecto de Laravel **extraer citas (quotes)** de One Piece de un sitio web llamado [freakuotes](https://freakuotes.com/frases/30/one-piece),  las **almacena en un archivo JSON** local y luego las **sirve a través de una API**.
+Este proyecto de Laravel **extraer citas (quotes)** de One Piece de un sitio web llamado [freakuotes](https://freakuotes.com/frases/30/one-piece), las **almacena en un archivo JSON** local y luego las **sirve a través de una API**, bien sea mostrandolas todas u obteniendo una cita aleatoriamente. **¡Inspirate con las frases del mundo de One Piece!**
 
 ---
 
