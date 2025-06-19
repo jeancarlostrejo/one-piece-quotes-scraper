@@ -21,7 +21,7 @@ class QuoteController extends Controller
         $quotes = Cache::remember('quotes_data', now()->addDay(), function () {
             $jsonData = Storage::disk('quotes')->get('quotes.json');
 
-            return json_decode($jsonData, true);
+            return collect(json_decode($jsonData, true));
         });
 
         return response()->json($quotes);
