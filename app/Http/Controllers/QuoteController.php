@@ -18,7 +18,7 @@ class QuoteController extends Controller
             ], 404);
         }
 
-        $quotes = Cache::remember('quotes_data', now()->addDay(), function() {
+        $quotes = Cache::remember('quotes_data', now()->addDay(), function () {
             $jsonData = Storage::disk('quotes')->get('quotes.json');
 
             return json_decode($jsonData, true);
@@ -35,7 +35,7 @@ class QuoteController extends Controller
             ], 404);
         }
 
-        $quotes = Cache::remember('quotes_data', now()->addDay(), function() {
+        $quotes = Cache::remember('quotes_data', now()->addDay(), function () {
             $jsonData = Storage::disk('quotes')->get('quotes.json');
 
             return collect(json_decode($jsonData, true));
@@ -54,10 +54,10 @@ class QuoteController extends Controller
             ], 404);
         }
 
-        $quotes = Cache::remember('quotes_data', now()->addDay(), function() {
+        $quotes = Cache::remember('quotes_data', now()->addDay(), function () {
             $jsonData = Storage::disk('quotes')->get('quotes.json');
 
-            return json_decode($jsonData, true);
+            return collect(json_decode($jsonData, true));
         });
 
         $quote = $quotes->random();
