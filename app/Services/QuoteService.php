@@ -2,16 +2,24 @@
 
 namespace App\Services;
 
+use App\Exceptions\PageUnavailableException;
 use Symfony\Component\BrowserKit\HttpBrowser;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpClient\HttpClient;
 use GuzzleHttp\Client;
 use GuzzleHttp\Promise\Utils;
+use Illuminate\Support\Facades\Http;
 
 class QuoteService
 {
     public function fetchQuotes(): array
     {
+        $response = Http::get(config('app.url_scraping'));
+
+        if (!$response->successful()) {
+            throw new PageUnavailableException();
+        }
+
         $quotes = [];
 
         $client = new Client();
