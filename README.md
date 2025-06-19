@@ -8,6 +8,7 @@ Este proyecto de Laravel **extraer citas (quotes)** de One Piece de un sitio web
 
 * **Scraping**: Extrae las citas de la URL objetivo [freakuotes](https://freakuotes.com/frases/30/one-piece).
 * **Almacenamiento Persistente**: Guarda todas las citas obtenidas en un archivo JSON en el sistema de archivos de la aplicación.
+* **Implementación de Caché**: Optimiza el acceso a las citas almacenadas utilizando el sistema de caché de Laravel. Los datos del archivo JSON se almacenan en memoria durante un período definido, reduciendo la necesidad de leer el archivo en cada solicitud.
 * **API REST**: Ofrece un endpoint `/api/quotes` que devuelve todas las citas; y otro endpoint `/api/quotes/random` para obtener una cita aleatoria.
 * **Página para cita aleatoria**: Una página donde ir generando y mostrando citas aleatorias con `/quote-random`
 ---
