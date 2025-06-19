@@ -1,61 +1,93 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# One Piece Quotes Scraper
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Este proyecto de Laravel **extraer citas (quotes)** de One Piece de un sitio web llamado [freakuotes](https://freakuotes.com/frases/30/one-piece),  las **almacena en un archivo JSON** local y luego las **sirve a través de una API**.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🚀 Características Principales
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+* **Scraping**: Extrae las citas de la URL objetivo [freakuotes](https://freakuotes.com/frases/30/one-piece).
+* **Almacenamiento Persistente**: Guarda todas las citas obtenidas en un archivo JSON en el sistema de archivos de la aplicación.
+* **API REST**: Ofrece un endpoint `/api/quotes` que devuelve las citas.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## 🛠️ Tecnologías Empleadas
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+* **Laravel 12**: El framework PHP.
+* **GuzzleHttp**: Utilizado para realizar solicitudes HTTP eficientes a la página web objetivo.
+* **Symfony DomCrawler**: Componente esencial para navegar y extraer datos de la estructura HTML de la página.
+* **Symfony HttpClient**: El cliente HTTP que `DomCrawler` y `HttpBrowser` usan para las solicitudes.
+* **PHP 8.2+**: La versión mínima de PHP requerida.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+---
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## ⚙️ Configuración del Proyecto
 
-## Laravel Sponsors
+Sigue estos pasos para poner en marcha tu proyecto localmente:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### 1. Clonar el Repositorio
 
-### Premium Partners
+Primero, descarga o clona el repositorio a tu máquina:
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+```bash
+git clone <URL_DEL_REPOSITORIO>
+cd one-piece-quotes-scraper
+```
+### 2. Instalar Dependencias
+Ejecuta los siguientes comandos:
+```bash
+composer install
+npm install
+```
 
-## Contributing
+### 3. Configuración del entorno
+Copia el archivo .env.example y renombralo a .env y genera una nueva clave de aplicación:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+ ```bash composer
+cp .env.example .env
+php artisan key:generate
+```
 
-## Code of Conduct
+###  4. Configurar la URL de Scraping
+Abre el archivo .env y asegúrate de configurar la URL de la página objetivo [freakuotes](https://freakuotes.com/frases/30/one-piece) 
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 5. Ejecuta las migraciones
+```bash
+php artisan migrate
+```
 
-## Security Vulnerabilities
+### 6. Levanta los servidores de desarrollo
+Ejecuta los siguientes comandos:
+```bash
+php artisan serve
+npm run dev
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### 7. Visita la url 
+Visita la dirección http://127.0.0.1:8000
 
-## License
+---
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## 🏃 Uso
+### 1. Scrapea el Sitio Web
+Visita la página http://127.0.0.1:8000/scraping para scrapear el sitio web de [freakuotes](https://freakuotes.com/frases/30/one-piece) y generar el json con los quotes
+
+### 2. Acceder a las Citas a través de la API
+Una vez que las citas hayan sido scrapeadas y guardadas, puedes acceder a ellas a través de la siguiente ruta:
+```
+GET /api/quotes
+```
+Esta ruta devolverá un JSON con todas las citas almacenadas en el archivo quotes.json. Por ejemplo:
+```json
+[
+    {
+        "quote": "¡Quiero crear un mundo donde todos puedan comer hasta saciarse!",
+        "author": "Monkey D. Luffy"
+    },
+    {
+        "quote": "Los fuertes viven y los débiles mueren.",
+        "author": "Kaido"
+    },
+]
+```
