@@ -5,6 +5,8 @@ namespace App\Services;
 use Symfony\Component\BrowserKit\HttpBrowser;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpClient\HttpClient;
+use GuzzleHttp\Client;
+use GuzzleHttp\Promise\Utils;
 
 class QuoteService
 {
@@ -12,34 +14,47 @@ class QuoteService
     {
         $quotes = [];
 
-        $browser = new HttpBrowser(HttpClient::create());
-        $crawler = $browser->request('GET', config('app.url_scraping'));
+        $client = new Client();
+        $crawler = (new HttpBrowser(HttpClient::create()))->request('GET', config('app.url_scraping'));
 
         // get all count of pages in pagination
         $pagination_html_element = $crawler->filter('.pagination li');
         $pages = (int) $pagination_html_element->getNode(count($pagination_html_element) - 2)->textContent;
 
+        //create an array of promises for each page
+        $promises = [];
+
+        // loop through each page and create a promise for each request
         for ($i = 1; $i <= $pages; $i++) {
-            // request each page
-            $crawler = $browser->request('GET', config('app.url_scraping') . '?page=' . $i);
+            $promises[$i] = $client->getAsync(config('app.url_scraping') . '?page=' . $i);
+        }
 
-            // filter all quotes from the page
-            $quotes_html_elements = $crawler->filter('.quote-container');
+        // wait for all promises to resolve independently if any of them fail
+        $responses = Utils::settle($promises)->wait();
 
-            // get each quote and author for each page
-            foreach ($quotes_html_elements as $element) {
-                $quoteCrawler = new Crawler($element);
+        foreach ($responses as $response) {
+            if ($response['state'] === 'fulfilled') {
+                $crawler = new Crawler($response['value']->getBody()->getContents());
 
-                $raw_quote = $quoteCrawler->filter('a')->innerText();
-                $quote = (str_replace("\\", '', $raw_quote));
+                // Filter the quotes from the HTML
+                $quotes_html_elements = $crawler->filter('.quote-container');
 
-                $author_html_element = $quoteCrawler->filter('.quote-author');
-                $author = $author_html_element->count() > 0 ? $author_html_element->text() : 'Unknown';
+                foreach ($quotes_html_elements as $element) {
+                    $quoteCrawler = new Crawler($element);
 
-                $quotes[] = [
-                    'quote' => $quote,
-                    'author' => $author,
-                ];
+                    // Extract the quote text
+                    $raw_quote = $quoteCrawler->filter('a')->text();
+                    $quote = stripslashes(str_replace("\\", '', trim($raw_quote)));
+
+                    // Extract the author name
+                    $author_html_element = $quoteCrawler->filter('.quote-author');
+                    $author = $author_html_element->count() > 0 ? $author_html_element->text() : 'Unknown';
+
+                    $quotes[] = [
+                        'quote' => $quote,
+                        'author' => $author,
+                    ];
+                }
             }
         }
 
