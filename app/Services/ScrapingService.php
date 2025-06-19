@@ -51,8 +51,9 @@ class ScrapingService
                     $quoteCrawler = new Crawler($element);
 
                     // Extract the quote text
-                    $raw_quote = $quoteCrawler->filter('a')->text();
-                    $quote = stripslashes(str_replace("\\", '', trim($raw_quote)));
+                    $raw_quote_html = $quoteCrawler->filter('a')->html();
+                    $raw_quote = strip_tags($raw_quote_html);
+                    $quote = stripslashes(str_replace('\"', '', trim($raw_quote)));
 
                     // Extract the author name
                     $author_html_element = $quoteCrawler->filter('.quote-author');
