@@ -25,7 +25,7 @@
             </div>
             <div class="text-center mt-8">
 
-                <a href="{{ route('quotes.random') }}"
+                <a href="{{ route('quote.random') }}"
                     class="block bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-full shadow-lg transform transition duration-300 hover:scale-105 hover:cursor-pointer">
                     Next Quote
                 </a>
