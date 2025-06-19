@@ -20,7 +20,7 @@ class ScrapingController extends Controller
 
             $jsonData = json_encode($quotes, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
 
-            Storage::disk('local')->put('quotes.json', $jsonData);
+            Storage::disk('quotes')->put('quotes.json', $jsonData);
 
             return response()->json(['message' => 'Quotes scraped successfully.',], 200);
         } catch (\Exception $e) {
