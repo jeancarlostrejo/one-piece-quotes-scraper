@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\PageUnavailableException;
-use App\Services\QuoteService;
+use App\Services\ScrapingService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -11,12 +11,12 @@ use Illuminate\Support\Facades\Storage;
 
 class ScrapingController extends Controller
 {
-    public function __construct(private QuoteService $quoteService) {}
+    public function __construct(private ScrapingService $scrapingService) {}
 
     public function scrapeQuotes(): JsonResponse
     {
         try {
-            $quotes = $this->quoteService->fetchQuotes();
+            $quotes = $this->scrapingService->fetchQuotes();
 
             $jsonData = json_encode($quotes, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
 

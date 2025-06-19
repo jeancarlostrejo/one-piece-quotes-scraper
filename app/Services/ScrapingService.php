@@ -10,7 +10,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Promise\Utils;
 use Illuminate\Support\Facades\Http;
 
-class QuoteService
+class ScrapingService
 {
     public function fetchQuotes(): array
     {
