@@ -36,10 +36,22 @@ class QuoteController extends Controller
 
         $quote = $quotes->random();
 
-        if($request->wantsJson()) {
-            return response()->json($quote);
+        return view('quotes.random', compact('quote'));
+    }
+
+    public function apiRandomQuote()
+    {
+        if (!Storage::disk('quotes')->exists('quotes.json')) {
+            return response()->json([
+                'message' => 'Quotes not found. Please scrape quotes first.',
+            ], 404);
         }
 
-        return view('quotes.random', compact('quote'));
+        $jsonData = Storage::disk('quotes')->get('quotes.json');
+        $quotes = collect(json_decode($jsonData, true));
+
+        $quote = $quotes->random();
+
+        return response()->json($quote);
     }
 }
