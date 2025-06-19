@@ -40,6 +40,8 @@ class ScrapingService
         // wait for all promises to resolve independently if any of them fail
         $responses = Utils::settle($promises)->wait();
 
+        $i = 1;
+
         foreach ($responses as $response) {
             if ($response['state'] === 'fulfilled') {
                 $crawler = new Crawler($response['value']->getBody()->getContents());
@@ -60,9 +62,11 @@ class ScrapingService
                     $author = $author_html_element->count() > 0 ? $author_html_element->text() : 'Unknown';
 
                     $quotes[] = [
+                        'id' => $i,
                         'quote' => $quote,
                         'author' => $author,
                     ];
+                    $i++;
                 }
             }
         }
