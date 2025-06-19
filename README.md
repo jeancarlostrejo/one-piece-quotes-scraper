@@ -8,8 +8,8 @@ Este proyecto de Laravel **extraer citas (quotes)** de One Piece de un sitio web
 
 * **Scraping**: Extrae las citas de la URL objetivo [freakuotes](https://freakuotes.com/frases/30/one-piece).
 * **Almacenamiento Persistente**: Guarda todas las citas obtenidas en un archivo JSON en el sistema de archivos de la aplicación.
-* **API REST**: Ofrece un endpoint `/api/quotes` que devuelve las citas.
-
+* **API REST**: Ofrece un endpoint `/api/quotes` que devuelve todas las citas; y otro endpoint `/api/quotes/random` para obtener una cita aleatoria.
+* **Página para cita aleatoria**: Una página donde ir generando y mostrando citas aleatorias con `/quote-random`
 ---
 
 ## 🛠️ Tecnologías Empleadas
@@ -19,6 +19,7 @@ Este proyecto de Laravel **extraer citas (quotes)** de One Piece de un sitio web
 * **Symfony DomCrawler**: Componente esencial para navegar y extraer datos de la estructura HTML de la página.
 * **Symfony HttpClient**: El cliente HTTP que `DomCrawler` y `HttpBrowser` usan para las solicitudes.
 * **PHP 8.2+**: La versión mínima de PHP requerida.
+* **HTML, Tailwind CSS**: para dar estilos a la página.
 
 ---
 
@@ -91,3 +92,18 @@ Esta ruta devolverá un JSON con todas las citas almacenadas en el archivo quote
     },
 ]
 ```
+
+### 3. Acceder a una cita aleatoria a través de la API
+Una vez que las citas hayan sido scrapeadas y guardadas, puedes obtener una cita aleatoria de la siguiente ruta:
+```
+GET /api/quotes/random
+```
+Esta ruta devolverá un JSON con una cita aleatoria. Por ejemplo:
+```json
+{
+    "quote": "Un hombre que no es capaz de secar las lágrimas de una mujer no es un hombre",
+    "author": "Kuroashi no Sanji"
+}
+```
+### 4. Acceder a una cita aleatoria a través de una página
+Puedes visitar la página `/quote-random` en la que te mostrará una tarjeta con una cita aleatoria y donde a través de un botón puedes obtener una nueva cita
