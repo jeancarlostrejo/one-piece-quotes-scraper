@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\PageUnavailableException;
+use App\Jobs\ScrapeQuotesJob;
 use App\Services\ScrapingService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -17,15 +18,11 @@ class ScrapingController extends Controller
     public function scrapeQuotes(): JsonResponse
     {
         try {
-            $quotes = $this->scrapingService->fetchQuotes();
+            ScrapeQuotesJob::dispatch($this->scrapingService);
 
-            $jsonData = json_encode($quotes, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
-
-            Cache::flush();
-
-            Storage::disk('quotes')->put('quotes.json', $jsonData);
-
-            return response()->json(['message' => 'Quotes scraped successfully.',], 200);
+            return response()->json([
+                'message' => 'Scraping quotes in progress. You can check the quotes later.',
+            ], 202);
         } catch (\Exception $e) {
             if ($e instanceof PageUnavailableException) {
                 return $e->render();
