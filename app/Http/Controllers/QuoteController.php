@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\QuoteService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -12,55 +13,58 @@ class QuoteController extends Controller
 {
     public function index(): JsonResponse
     {
-        if (!Storage::disk('quotes')->exists('quotes.json')) {
+        if(!QuoteService::quotesFileExists()) {
             return response()->json([
                 'message' => 'Quotes not found. Please scrape quotes first.',
             ], 404);
         }
 
-        $quotes = Cache::remember('quotes_data', now()->addDay(), function () {
-            $jsonData = Storage::disk('quotes')->get('quotes.json');
+        $quotes = QuoteService::getQuotes();
 
-            return collect(json_decode($jsonData, true));
-        });
+        if ($quotes->isEmpty()) {
+            return response()->json([
+                'message' => 'No quotes available.',
+                'data' => []
+            ], 200);
+        }
 
         return response()->json($quotes);
     }
 
     public function randomQuote(Request $request): JsonResponse | View
     {
-        if (!Storage::disk('quotes')->exists('quotes.json')) {
+        if (!QuoteService::quotesFileExists()) {
             return response()->json([
                 'message' => 'Quotes not found. Please scrape quotes first.',
             ], 404);
         }
 
-        $quotes = Cache::remember('quotes_data', now()->addDay(), function () {
-            $jsonData = Storage::disk('quotes')->get('quotes.json');
+        $quote = QuoteService::getRandomQuote();
 
-            return collect(json_decode($jsonData, true));
-        });
-
-        $quote = $quotes->random();
+        if (!$quote) {
+            return response()->json([
+                'message' => 'No quotes available.',
+            ], 200);
+        }
 
         return view('quotes.random', compact('quote'));
     }
 
     public function apiRandomQuote()
     {
-        if (!Storage::disk('quotes')->exists('quotes.json')) {
+        if (!QuoteService::quotesFileExists()) {
             return response()->json([
                 'message' => 'Quotes not found. Please scrape quotes first.',
             ], 404);
         }
 
-        $quotes = Cache::remember('quotes_data', now()->addDay(), function () {
-            $jsonData = Storage::disk('quotes')->get('quotes.json');
+        $quote = QuoteService::getRandomQuote();
 
-            return collect(json_decode($jsonData, true));
-        });
-
-        $quote = $quotes->random();
+        if (!$quote) {
+            return response()->json([
+                'message' => 'No quotes available.',
+            ], 200);
+        }
 
         return response()->json($quote);
     }
