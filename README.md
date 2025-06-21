@@ -12,6 +12,7 @@ Este proyecto de Laravel **extraer citas (quotes)** de One Piece de un sitio web
 * **API REST**: Ofrece un endpoint `/api/quotes` que devuelve todas las citas; y otro endpoint `/api/quotes/random` para obtener una cita aleatoria.
 * **Página para cita aleatoria**: Una página donde ir generando y mostrando citas aleatorias con `/quote-random`
 * **Implementación de queues y jobs**: Realiza el scraping del sitio en segundo plano por medio de las queue y los jobs, lo que permite que la operación sea más eficiente y no bloquee el flujo de la aplicación mientras se realiza el proceso.
+* **Implementación de envio de email utilizando tareas programadas**: Se configura el envio por correo electrónico de una cita aleatoria utilizando Resend como api de correo; además de utilizar comandos de consola y tareas programadas para programar el envio de correo en un momento específico.
 ---
 
 ## 🛠️ Tecnologías Empleadas
@@ -22,6 +23,7 @@ Este proyecto de Laravel **extraer citas (quotes)** de One Piece de un sitio web
 * **Symfony HttpClient**: El cliente HTTP que `DomCrawler` y `HttpBrowser` usan para las solicitudes.
 * **PHP 8.2+**: La versión mínima de PHP requerida.
 * **HTML, Tailwind CSS**: para dar estilos a la página.
+* **Resend**: API de correo electrónico para desarrolladores
 
 ---
 
@@ -65,6 +67,8 @@ Para usar el controlador de cola de la base de datos, necesitará una tabla de b
 ```bash
 php artisan make:queue-table
 ```
+### Bonus. Configurar envío de correo
+Puede configurar un servicio para el envío de correo electrónico. En este caso se utilizó [Resend](https://resend.com/). Puede consultar toda la documentación para laravel [aquí](https://resend.com/docs/send-with-laravel).
 
 
 ### 7. Ejecuta las migraciones
@@ -78,6 +82,11 @@ Ejecuta los siguientes comandos, cada uno en una terminal diferente:
 php artisan serve
 php artisan queue:work
 npm run dev
+```
+
+***IMPORTANTE*** Para la ejecución y prueba de tareas programadas deberá ejecutar en una terminal diferente el comando:
+```bash
+php artisan schedule:run
 ```
 
 ### 9. Visita la url 
@@ -122,3 +131,6 @@ Esta ruta devolverá un JSON con una cita aleatoria. Por ejemplo:
 ```
 ### 4. Acceder a una cita aleatoria a través de una página
 Puedes visitar la página `/quote-random` en la que te mostrará una tarjeta con una cita aleatoria y donde a través de un botón puedes obtener una nueva cita
+
+### 5. Obtener una cita aleatoria en la terminal
+Puede utilizar el comando `php artisan quote:random` para obtener una cita en la terminal
