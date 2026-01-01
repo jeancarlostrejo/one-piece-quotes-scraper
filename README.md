@@ -11,6 +11,8 @@ Este proyecto de Laravel **extraer citas (quotes)** de One Piece de un sitio web
 * **Implementación de Caché**: Optimiza el acceso a las citas almacenadas utilizando el sistema de caché de Laravel. Los datos del archivo JSON se almacenan en memoria durante un período definido, reduciendo la necesidad de leer el archivo en cada solicitud.
 * **API REST**: Ofrece un endpoint `/api/quotes` que devuelve todas las citas; y otro endpoint `/api/quotes/random` para obtener una cita aleatoria.
 * **Página para cita aleatoria**: Una página donde ir generando y mostrando citas aleatorias con `/quote-random`
+* **Implementación de queues y jobs**: Realiza el scraping del sitio en segundo plano por medio de las queue y los jobs, lo que permite que la operación sea más eficiente y no bloquee el flujo de la aplicación mientras se realiza el proceso.
+* **Implementación de envio de email utilizando tareas programadas**: Se configura el envio por correo electrónico de una cita aleatoria utilizando Resend como api de correo; además de utilizar comandos de consola y tareas programadas para programar el envio de correo en un momento específico.
 ---
 
 ## 🛠️ Tecnologías Empleadas
@@ -21,6 +23,7 @@ Este proyecto de Laravel **extraer citas (quotes)** de One Piece de un sitio web
 * **Symfony HttpClient**: El cliente HTTP que `DomCrawler` y `HttpBrowser` usan para las solicitudes.
 * **PHP 8.2+**: La versión mínima de PHP requerida.
 * **HTML, Tailwind CSS**: para dar estilos a la página.
+* **Resend**: API de correo electrónico para desarrolladores
 
 ---
 
@@ -55,21 +58,38 @@ php artisan key:generate
 Abre el archivo .env y asegúrate de configurar la URL de la página objetivo [freakuotes](https://freakuotes.com/frases/30/one-piece) 
 
 ###  5. Configurar El Driver de Caché
-Abre el archivo .env y configurar el driver de caché que desees utilizar (por defecto es driver es CACHE_STORE=database)
+Abre el archivo .env y configurar el driver de caché que desees utilizar (por defecto es driver es `CACHE_STORE=database`)
 
-### 6. Ejecuta las migraciones
+###  6. Configurar El Driver de colas
+Abre el archivo .env y configurar el driver de caché que desees utilizar (por defecto es driver es `QUEUE_CONNECTION=database`).
+
+Para usar el controlador de cola de la base de datos, necesitará una tabla de base de datos para almacenar los jobs. Normalmente, esto se incluye en la migración de base de datos predeterminada de Laravel, `0001_01_01_000002_create_jobs_table.php`; sin embargo, si su aplicación no incluye esta migración, puede usar el comando artisan para crearla:
+```bash
+php artisan make:queue-table
+```
+### Bonus. Configurar envío de correo
+Puede configurar un servicio para el envío de correo electrónico. En este caso se utilizó [Resend](https://resend.com/). Puede consultar toda la documentación para laravel [aquí](https://resend.com/docs/send-with-laravel).
+
+
+### 7. Ejecuta las migraciones
 ```bash
 php artisan migrate
 ```
 
-### 7. Levanta los servidores de desarrollo
-Ejecuta los siguientes comandos:
+### 8. Levanta los servidores de desarrollo
+Ejecuta los siguientes comandos, cada uno en una terminal diferente:
 ```bash
 php artisan serve
+php artisan queue:work
 npm run dev
 ```
 
-### 8. Visita la url 
+***IMPORTANTE*** Para la ejecución y prueba de tareas programadas deberá ejecutar en una terminal diferente el comando:
+```bash
+php artisan schedule:run
+```
+
+### 9. Visita la url 
 Visita la dirección http://127.0.0.1:8000
 
 ---
@@ -111,3 +131,6 @@ Esta ruta devolverá un JSON con una cita aleatoria. Por ejemplo:
 ```
 ### 4. Acceder a una cita aleatoria a través de una página
 Puedes visitar la página `/quote-random` en la que te mostrará una tarjeta con una cita aleatoria y donde a través de un botón puedes obtener una nueva cita
+
+### 5. Obtener una cita aleatoria en la terminal
+Puede utilizar el comando `php artisan quote:random` para obtener una cita en la terminal
