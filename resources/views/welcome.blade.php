@@ -1,16 +1,4 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>One Piece Quotes Scraper</title>
-    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
-
-<body
-    class="bg-gradient-to-r from-blue-100 via-blue-200 to-blue-300 text-gray-800 flex items-center justify-center min-h-screen">
+<x-layout title="One Piece Quotes Scraper">
     <div
         class="max-w-4xl mx-5 bg-white rounded-lg shadow-lg border-2 border-blue-300 mt-5 mb-5 md:mt-10 md:mb-20 sm:mx-10">
         <header class="text-center mb-6 mt-4 p-2">
@@ -58,11 +46,4 @@
                 </div>
             </div>
         </main>
-        <footer class="text-center mt-4 mb-4 pb-2">
-            <p class="text-gray-500 text-sm">Made with ❤️ by Jean Carlos</p>
-            <img src="{{ asset('images/luffy-draw-flag.png') }}" alt="One Piece Flag" class="mx-auto w-24 mt-4">
-        </footer>
-    </div>
-</body>
-
-</html>
+</x-layout>
